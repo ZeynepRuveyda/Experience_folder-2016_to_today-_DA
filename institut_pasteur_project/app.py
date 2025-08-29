@@ -12,19 +12,29 @@ st.caption('Synthetic demo for interview – explore climate variables and egg-l
 DATA_CSV = Path('mosquito_timeseries.csv')
 METRICS_CSV = Path('model_metrics.csv')
 
+
+def ensure_data():
+    if DATA_CSV.exists() and METRICS_CSV.exists():
+        return
+    with st.spinner('Generating data (first run)...'):
+        try:
+            from pasteur_modeling import main as run_model
+            run_model()
+        except Exception as e:
+            st.error(f'Data generation failed: {e}')
+
+
 @st.cache_data
 def load_data():
-    if DATA_CSV.exists():
-        df = pd.read_csv(DATA_CSV, parse_dates=['date'])
-    else:
-        df = pd.DataFrame()
+    ensure_data()
+    df = pd.read_csv(DATA_CSV, parse_dates=['date']) if DATA_CSV.exists() else pd.DataFrame()
     metrics = pd.read_csv(METRICS_CSV) if METRICS_CSV.exists() else pd.DataFrame()
     return df, metrics
 
 
 df, metrics = load_data()
 if df.empty:
-    st.warning('Run pasteur_modeling.py first to generate data and metrics.')
+    st.warning('Data not available. Click Rerun (top-right) or try again in a few seconds.')
     st.stop()
 
 with st.sidebar:

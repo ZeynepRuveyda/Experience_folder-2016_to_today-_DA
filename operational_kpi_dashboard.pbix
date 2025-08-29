@@ -1,0 +1,26 @@
+# Power BI Dashboard - Operasyonel KPI Analizi
+# Bu dosya Power BI Desktop'ta açılabilir
+
+# Dashboard Bileşenleri:
+# 1. Günlük/Haftalık Performans Metrikleri (Line Chart)
+# 2. Process Efficiency Analizi (Funnel Chart)
+# 3. Resource Utilization (Gauge Chart)
+# 4. Quality Metrics (Bar Chart)
+# 5. SLA Compliance (KPI Cards)
+
+# Örnek Veri Yapısı:
+# - Tarih
+# - Process Type
+# - Completion Time
+# - Quality Score
+# - Resource Used
+# - SLA Target
+# - SLA Actual
+# - Error Count
+
+# DAX Formülleri:
+# Process Efficiency = [Completed Tasks] / [Total Tasks]
+# SLA Compliance = [OnTimeDeliveries] / [TotalDeliveries]
+# Quality Score = AVERAGE(Processes[QualityScore])
+# Resource Utilization = [UsedResources] / [AvailableResources]
+

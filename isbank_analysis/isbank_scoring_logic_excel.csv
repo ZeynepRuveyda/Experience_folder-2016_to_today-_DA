@@ -1,0 +1,21 @@
+CustomerID,Age,Income,EducationLevel,CurrentBalance,MonthlyTransactions,InvestmentAmount,IncomeScore,BalanceScore,EducationScore,ActivityScore,TotalScore,Segment,PotentialLevel,CLV
+C0001,35,85000,Master,150000,35,25000,20,20,20,20,80,Ultra High Potential,A+,12500
+C0002,28,120000,PhD,300000,45,50000,25,25,25,25,100,Ultra High Potential,A+,18750
+C0003,42,65000,Bachelor,80000,25,15000,15,15,15,15,60,Medium-High Potential,B+,9000
+C0004,55,95000,Master,200000,30,40000,20,25,20,20,85,Ultra High Potential,A+,14000
+C0005,31,75000,Bachelor,120000,40,30000,20,20,15,25,80,Ultra High Potential,A+,12000
+C0006,38,45000,High School,60000,20,10000,15,15,10,15,55,Medium Potential,B,6750
+C0007,29,110000,Master,180000,35,35000,25,20,20,20,85,Ultra High Potential,A+,16000
+C0008,47,55000,Bachelor,90000,15,20000,15,15,15,10,55,Medium Potential,B,7000
+C0009,33,95000,PhD,250000,50,60000,20,25,25,25,95,Ultra High Potential,A+,17500
+C0010,41,70000,Master,110000,30,25000,15,20,20,20,75,High Potential,A,10000
+C0011,26,80000,Bachelor,95000,35,20000,20,15,15,20,70,High Potential,A,9500
+C0012,52,60000,High School,75000,18,15000,15,15,10,10,50,Medium Potential,B,6000
+C0013,36,105000,Master,220000,40,45000,25,25,20,25,95,Ultra High Potential,A+,17000
+C0014,44,65000,Bachelor,85000,22,18000,15,15,15,15,60,Medium-High Potential,B+,8000
+C0015,30,90000,PhD,160000,38,30000,20,20,25,20,85,Ultra High Potential,A+,13500
+C0016,39,50000,High School,70000,12,12000,15,15,10,10,50,Medium Potential,B,5500
+C0017,27,115000,Master,190000,42,40000,25,20,20,25,90,Ultra High Potential,A+,15500
+C0018,48,58000,Bachelor,95000,16,20000,15,15,15,10,55,Medium Potential,B,7000
+C0019,34,88000,Master,140000,33,28000,20,20,20,20,80,Ultra High Potential,A+,12000
+C0020,45,62000,High School,80000,14,16000,15,15,10,10,50,Medium Potential,B,6000

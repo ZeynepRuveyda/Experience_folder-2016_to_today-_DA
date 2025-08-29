@@ -1,0 +1,17 @@
+CustomerID,Segment,AgeGroup,Gender,TotalSpend,LastPurchaseDate,ChurnStatus,SatisfactionScore
+C001,Premium,25-34,Female,15000,2024-01-15,Active,9
+C002,Gold,35-44,Male,12000,2024-01-10,Active,8
+C003,Silver,18-24,Female,8000,2024-01-12,Active,7
+C004,Bronze,45-54,Male,5000,2024-01-08,Churned,5
+C005,Premium,25-34,Male,18000,2024-01-14,Active,9
+C006,Gold,35-44,Female,11000,2024-01-11,Active,8
+C007,Silver,18-24,Male,7500,2024-01-09,Active,7
+C008,Bronze,45-54,Female,4500,2024-01-07,Churned,4
+C009,Premium,25-34,Female,16000,2024-01-13,Active,9
+C010,Gold,35-44,Male,13000,2024-01-12,Active,8
+C011,Silver,18-24,Male,9000,2024-01-10,Active,7
+C012,Bronze,45-54,Female,6000,2024-01-06,Churned,6
+C013,Premium,25-34,Male,17000,2024-01-14,Active,9
+C014,Gold,35-44,Female,14000,2024-01-11,Active,8
+C015,Silver,18-24,Female,8500,2024-01-09,Active,7
+

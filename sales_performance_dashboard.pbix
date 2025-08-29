@@ -1,0 +1,23 @@
+# Power BI Dashboard - Satış Performans Analizi
+# Bu dosya Power BI Desktop'ta açılabilir
+
+# Dashboard Bileşenleri:
+# 1. Yıllık Satış Trendleri (Line Chart)
+# 2. Bölgesel Performans (Map Visualization)
+# 3. Ürün Kategorisi Analizi (Bar Chart)
+# 4. Hedef vs Gerçekleşen (Gauge Chart)
+# 5. Toplam Satış Metrikleri (Card Visuals)
+
+# Örnek Veri Yapısı:
+# - Tarih
+# - Bölge
+# - Ürün Kategorisi
+# - Satış Miktarı
+# - Satış Tutarı
+# - Hedef Tutar
+
+# DAX Formülleri:
+# Total Sales = SUM(Sales[Amount])
+# Sales Growth = ([Total Sales] - [Previous Year Sales]) / [Previous Year Sales]
+# Target Achievement = [Total Sales] / [Target Amount]
+

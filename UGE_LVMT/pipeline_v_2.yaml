@@ -1,0 +1,95 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: hello-world-
+  annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.9, pipelines.kubeflow.org/pipeline_compilation_time: '2024-05-21T13:34:06.066005',
+    pipelines.kubeflow.org/pipeline_spec: '{"description": "A pipeline to demonstrate
+      use of PersistentVolumeClaim", "inputs": [{"default": "/mnt/data/kubeflow",
+      "name": "log", "optional": true, "type": "String"}, {"default": "", "name":
+      "data_folder_directory", "optional": true, "type": "String"}, {"default": "",
+      "name": "output_folder_directory", "optional": true, "type": "String"}, {"default":
+      "", "name": "tmp_folder_directory", "optional": true, "type": "String"}, {"default":
+      "0.001", "name": "sampling_rate", "optional": true, "type": "Float"}], "name":
+      "Hello World"}'}
+  labels: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.9}
+spec:
+  entrypoint: hello-world
+  templates:
+  - name: edit-config-yml
+    container:
+      args: [/mnt/data/kubeflow/code/edit_config.py, --log_dir, '{{inputs.parameters.log}}',
+        --data_folder_directory, '{{inputs.parameters.data_folder_directory}}', --output_folder_directory,
+        '{{inputs.parameters.output_folder_directory}}', --tmp_folder_directory, '{{inputs.parameters.tmp_folder_directory}}',
+        --sampling_rate, '{{inputs.parameters.sampling_rate}}']
+      command: [python3]
+      image: zeynep02/pipeline-v0.0.1:latest
+      volumeMounts:
+      - {mountPath: /mnt/data/kubeflow, name: pvolume-2702e0041dc7869f5ca7fcf2de957112d15d9a932d5e274a7bf2565}
+    inputs:
+      parameters:
+      - {name: data_folder_directory}
+      - {name: log}
+      - {name: output_folder_directory}
+      - {name: sampling_rate}
+      - {name: tmp_folder_directory}
+    metadata:
+      labels:
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.9
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+        pipelines.kubeflow.org/enable_caching: "true"
+      annotations: {pipelines.kubeflow.org/max_cache_staleness: P0D}
+    volumes:
+    - name: pvolume-2702e0041dc7869f5ca7fcf2de957112d15d9a932d5e274a7bf2565
+      persistentVolumeClaim: {claimName: my-pvc}
+  - name: git-clone-equasim
+    container:
+      args: [/mnt/data/kubeflow/code/clone.py, --log_dir, '{{inputs.parameters.log}}']
+      command: [python3]
+      image: zeynep02/pipeline-v0.0.1:latest
+      volumeMounts:
+      - {mountPath: /mnt/data/kubeflow, name: pvolume-2702e0041dc7869f5ca7fcf2de957112d15d9a932d5e274a7bf2565}
+    inputs:
+      parameters:
+      - {name: log}
+    metadata:
+      labels:
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.9
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+        pipelines.kubeflow.org/enable_caching: "true"
+      annotations: {pipelines.kubeflow.org/max_cache_staleness: P0D}
+    volumes:
+    - name: pvolume-2702e0041dc7869f5ca7fcf2de957112d15d9a932d5e274a7bf2565
+      persistentVolumeClaim: {claimName: my-pvc}
+  - name: hello-world
+    inputs:
+      parameters:
+      - {name: data_folder_directory}
+      - {name: log}
+      - {name: output_folder_directory}
+      - {name: sampling_rate}
+      - {name: tmp_folder_directory}
+    dag:
+      tasks:
+      - name: edit-config-yml
+        template: edit-config-yml
+        dependencies: [git-clone-equasim]
+        arguments:
+          parameters:
+          - {name: data_folder_directory, value: '{{inputs.parameters.data_folder_directory}}'}
+          - {name: log, value: '{{inputs.parameters.log}}'}
+          - {name: output_folder_directory, value: '{{inputs.parameters.output_folder_directory}}'}
+          - {name: sampling_rate, value: '{{inputs.parameters.sampling_rate}}'}
+          - {name: tmp_folder_directory, value: '{{inputs.parameters.tmp_folder_directory}}'}
+      - name: git-clone-equasim
+        template: git-clone-equasim
+        arguments:
+          parameters:
+          - {name: log, value: '{{inputs.parameters.log}}'}
+  arguments:
+    parameters:
+    - {name: log, value: /mnt/data/kubeflow}
+    - {name: data_folder_directory, value: ''}
+    - {name: output_folder_directory, value: ''}
+    - {name: tmp_folder_directory, value: ''}
+    - {name: sampling_rate, value: '0.001'}
+  serviceAccountName: pipeline-runner

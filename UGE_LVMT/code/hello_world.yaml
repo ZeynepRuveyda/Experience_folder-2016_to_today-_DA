@@ -1,0 +1,51 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: hello-world-
+  annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.9, pipelines.kubeflow.org/pipeline_compilation_time: '2024-05-20T23:40:05.168134',
+    pipelines.kubeflow.org/pipeline_spec: '{"description": "A pipeline to demonstrate
+      use of PersistentVolumeClaim", "name": "Hello World"}'}
+  labels: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.9}
+spec:
+  entrypoint: hello-world
+  templates:
+  - name: hello-world
+    dag:
+      tasks:
+      - name: read
+        template: read
+        dependencies: [write]
+      - {name: write, template: write}
+  - name: read
+    container:
+      args: [cat /mnt/data/kubeflow/hello_world.txt]
+      command: [sh, -c]
+      image: busybox
+      volumeMounts:
+      - {mountPath: /mnt/data/kubeflow, name: pvolume-2702e0041dc7869f5ca7fcf2de957112d15d9a932d5e274a7bf2565}
+    metadata:
+      labels:
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.9
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+        pipelines.kubeflow.org/enable_caching: "true"
+    volumes:
+    - name: pvolume-2702e0041dc7869f5ca7fcf2de957112d15d9a932d5e274a7bf2565
+      persistentVolumeClaim: {claimName: my-pvc}
+  - name: write
+    container:
+      args: [echo "Hello" > /mnt/data/kubeflow/hello_world.txt]
+      command: [sh, -c]
+      image: busybox
+      volumeMounts:
+      - {mountPath: /mnt/data/kubeflow, name: pvolume-2702e0041dc7869f5ca7fcf2de957112d15d9a932d5e274a7bf2565}
+    metadata:
+      labels:
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.9
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+        pipelines.kubeflow.org/enable_caching: "true"
+    volumes:
+    - name: pvolume-2702e0041dc7869f5ca7fcf2de957112d15d9a932d5e274a7bf2565
+      persistentVolumeClaim: {claimName: my-pvc}
+  arguments:
+    parameters: []
+  serviceAccountName: pipeline-runner

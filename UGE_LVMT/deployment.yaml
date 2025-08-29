@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-test-deployment
+  namespace: kubeflow-user-example-com
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-container
+  template:
+    metadata:
+      labels:
+        app: my-container
+    spec:
+      containers:
+      - name: my-test-container
+        image: zeynep02/test-home-v1.3:latest
+        ports:
+        - containerPort: 5000
+        recources:
+        volumeMounts:
+        - mountPath: /app
+          name: my-storage
+      volumes:
+      - name: my-storage
+        persistentVolumeClaim:
+          claimName: my-pvc-mnt

@@ -1,0 +1,51 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: pvc-pipeline-
+  annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.9, pipelines.kubeflow.org/pipeline_compilation_time: '2024-05-20T23:32:00.994379',
+    pipelines.kubeflow.org/pipeline_spec: '{"description": "A pipeline to demonstrate
+      use of PersistentVolumeClaim", "name": "PVC Pipeline"}'}
+  labels: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.9}
+spec:
+  entrypoint: pvc-pipeline
+  templates:
+  - name: data-consumer
+    container:
+      args: [cat /mnt/data/kubeflow/message.txt]
+      command: [sh, -c]
+      image: busybox
+      volumeMounts:
+      - {mountPath: /mnt/data/kubeflow, name: pvolume-2702e0041dc7869f5ca7fcf2de957112d15d9a932d5e274a7bf2565}
+    metadata:
+      labels:
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.9
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+        pipelines.kubeflow.org/enable_caching: "true"
+    volumes:
+    - name: pvolume-2702e0041dc7869f5ca7fcf2de957112d15d9a932d5e274a7bf2565
+      persistentVolumeClaim: {claimName: my-pvc}
+  - name: data-producer
+    container:
+      args: ['echo "Hello, Kubeflow! CACA" > /mnt/data/kubeflow/message.txt']
+      command: [sh, -c]
+      image: busybox
+      volumeMounts:
+      - {mountPath: /mnt/data/kubeflow, name: pvolume-2702e0041dc7869f5ca7fcf2de957112d15d9a932d5e274a7bf2565}
+    metadata:
+      labels:
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.9
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+        pipelines.kubeflow.org/enable_caching: "true"
+    volumes:
+    - name: pvolume-2702e0041dc7869f5ca7fcf2de957112d15d9a932d5e274a7bf2565
+      persistentVolumeClaim: {claimName: my-pvc}
+  - name: pvc-pipeline
+    dag:
+      tasks:
+      - name: data-consumer
+        template: data-consumer
+        dependencies: [data-producer]
+      - {name: data-producer, template: data-producer}
+  arguments:
+    parameters: []
+  serviceAccountName: pipeline-runner

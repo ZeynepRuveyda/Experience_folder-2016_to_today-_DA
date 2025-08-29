@@ -1,0 +1,45 @@
+# Power BI Template Placeholder
+# Bu dosya .pbix formatında olmalı
+# Şu anda sadece placeholder olarak text formatında
+
+## Automi AI - Production Quality Dashboard Template
+
+### Data Sources (Import these CSVs):
+1. daily_defect_rate.csv
+2. defects_by_cause.csv  
+3. defects_by_station_team.csv
+4. throughput_by_station.csv
+
+### Dashboard Structure:
+- Page 1: Daily Quality Overview
+- Page 2: Root Cause Analysis  
+- Page 3: Station Performance
+- Page 4: Image Quality Metrics
+
+### Key Visuals:
+- Line charts: Daily defect rate trends
+- Bar charts: Top defect causes
+- Matrix: Station x Team defect heatmap
+- Cards: KPI metrics
+- Slicers: Date, Station, Team filters
+
+### DAX Measures:
+- Total Defects, Total Items, Defect Rate
+- YoY comparisons, Pareto analysis
+- Station-Team performance metrics
+
+### Notes:
+- Import mode recommended for performance
+- Create Date dimension table
+- Set up proper relationships
+- Use conditional formatting for defect rates
+- Apply RLS if needed by station/team
+
+### To create actual .pbix:
+1. Open Power BI Desktop
+2. Import the 4 CSV files
+3. Create Date dimension
+4. Set up relationships
+5. Add visuals as described above
+6. Apply DAX measures from measures_dax.txt
+7. Save as .pbix file

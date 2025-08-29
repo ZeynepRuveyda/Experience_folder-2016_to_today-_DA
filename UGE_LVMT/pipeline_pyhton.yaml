@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: hello-world-
+  annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.9, pipelines.kubeflow.org/pipeline_compilation_time: '2024-05-21T10:49:49.706844',
+    pipelines.kubeflow.org/pipeline_spec: '{"description": "A pipeline to demonstrate
+      use of PersistentVolumeClaim", "inputs": [{"default": "/mnt/data/kubeflow",
+      "name": "log", "optional": true}], "name": "Hello World"}'}
+  labels: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.9}
+spec:
+  entrypoint: hello-world
+  templates:
+  - name: edit-config
+    container:
+      args: [/mnt/data/kubeflow/code/main.py, --log_dir, '{{inputs.parameters.log}}']
+      command: [python3]
+      image: zeynep02/pipeline-v0.0.1:latest
+      volumeMounts:
+      - {mountPath: /mnt/data/kubeflow, name: pvolume-2702e0041dc7869f5ca7fcf2de957112d15d9a932d5e274a7bf2565}
+    inputs:
+      parameters:
+      - {name: log}
+    metadata:
+      labels:
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.9
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+        pipelines.kubeflow.org/enable_caching: "true"
+    volumes:
+    - name: pvolume-2702e0041dc7869f5ca7fcf2de957112d15d9a932d5e274a7bf2565
+      persistentVolumeClaim: {claimName: my-pvc}
+  - name: hello-world
+    inputs:
+      parameters:
+      - {name: log}
+    dag:
+      tasks:
+      - name: edit-config
+        template: edit-config
+        arguments:
+          parameters:
+          - {name: log, value: '{{inputs.parameters.log}}'}
+  arguments:
+    parameters:
+    - {name: log, value: /mnt/data/kubeflow}
+  serviceAccountName: pipeline-runner

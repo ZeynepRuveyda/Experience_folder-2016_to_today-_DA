@@ -1,0 +1,29 @@
+-- Core
+Total Defects = SUM( 'defects_by_station_team'[defects] )
+Total Items = SUM( 'defects_by_station_team'[items] )
+Defect Rate = DIVIDE( [Total Defects], [Total Items] )
+
+-- Daily Defects (from daily table)
+Daily Defect Rate = AVERAGE( 'daily_defect_rate'[defect_rate] )
+
+-- Selected Period
+Selected Defects = CALCULATE( [Total Defects], ALLSELECTED() )
+Selected Items = CALCULATE( [Total Items], ALLSELECTED() )
+Selected Defect Rate = DIVIDE( [Selected Defects], [Selected Items] )
+
+-- YoY (requires Date table)
+Defects YoY = CALCULATE( [Total Defects], DATEADD( 'Date'[date], -1, YEAR ) )
+Defect Rate YoY = CALCULATE( [Defect Rate], DATEADD( 'Date'[date], -1, YEAR ) )
+
+-- Pareto (% cumulative of causes)
+Cause Defects = SUM( 'defects_by_cause'[defects] )
+Cause Rank = RANKX( ALL('defects_by_cause'[cause]), [Cause Defects], , DESC )
+Cause Cum % =
+VAR TotalAll = CALCULATE( [Cause Defects], ALL('defects_by_cause'[cause]) )
+VAR Cum =
+    CALCULATE( [Cause Defects],
+        FILTER( ALL('defects_by_cause'[cause]), [Cause Rank] <= MAX([Cause Rank]) ) )
+RETURN DIVIDE( Cum, TotalAll )
+
+-- Station x Team defect rate (for matrix)
+Station-Team Defect Rate = AVERAGE( 'defects_by_station_team'[defect_rate] )
